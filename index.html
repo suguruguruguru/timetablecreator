@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>タイムテ作成くん - TIMETABLE GENERATOR</title>
+
+    <!-- ふぁびこん -->
+    <link rel="shortcut icon" href="./favicon.png" type="image/ong">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="./css/jquery.timepicker.css">
+    <link rel="stylesheet" href="./css/main.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>    <link rel="stylesheet" href="./css/animate.css">
+</head>
+<body class="bg-blue">
+    <div id="app" class="container">
+        <header class="animated header fixed" :class="[ showHeader ? 'fadeInDown':'fadeOutUp', { hide:window.pageYOffset === 0 }]">
+            <div id="heaader_block" class="text-white">
+                <span class="icon-size-adjust"><i class="material-icons">assignment</i></span>
+                <small>&nbsp;タイムテ作成くん - TIMETABLE GENERATOR</small>
+            </div>
+        </header>
+        <!--titleとか-->
+        <div id="title_block">
+            <h1 class="lg-font"><i class="material-icons">assignment</i></h1>
+            <small>TIMETABLE GENERATOR</small>
+        </div>
+        <h4 class="text-white title-head">タイムテ作成くん</h4>
+        <!--めいん-->
+        <div class="block text-white relative">
+            <!--企画名-->
+            <div>
+                <input placeholder="イベント名、企画名を入れてね" v-model="eventTitle" @change="createTextData()">
+            </div>
+            <!--タイムテ-->
+            <div class="main-table">
+                <table class="bordered" style="width: 100%">
+                    <tr>
+                        <th class="align-center">開始</th>
+                        <th class="align-center">終了</th>
+                        <th>なまえ</th>
+                        <th class="operate-column" :class="{ 'sp-operate-column':isSpMode }">操作</th>
+                    </tr>
+                    <tr v-for="(artist, index) in artists">
+                        <td class="time-column align-center">{{artist.time}}</td>
+                        <td class="time-column align-center">{{artist.endTime}}</td>
+                        <td>{{artist.name}}</td>
+                        <!--for PC-->
+                        <td v-if="!isSpMode" class="align-center operate-column">
+                            <button v-if="index !== 0" class="operate-button waves-effect waves-light btn-floating" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_up</i></button>
+                            <button v-if="index !== 0" class="operate-button waves-effect waves-light btn-floating" @click="changeOrder(index, false)"><i class="material-icons">keyboard_arrow_down</i></button>
+                            <button v-if="index !== 0" class="operate-button waves-effect waves-light btn-floating red" @click="deleteArtist(index)"><i class="material-icons">delete</i></button>
+                        </td>
+                        <!--for SP-->
+                        <td v-if="isSpMode" class="align-center operate-column" :class="{ 'sp-operate-column':isSpMode }">
+                            <div class='collection'>
+                                <a class="collection-item grey-text" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_up</i></a>
+                                <a class="collection-item grey-text" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_down</i></a>
+                                <a class="collection-item red white-text" @click="deleteArtist(index)"><i class="material-icons">delete</i></a>
+                            </ul>
+                        </td>
+                    </td>
+                </table>
+            </div>
+            <!--演者追加部分 TODO:空っぽやんけ追加-->
+            <div class=" margin-top-bottom">
+                <div class="row">
+                    <div class="input-field align-left col s8 m10">
+                        <input id="input_artist" type="text" v-model="inputValue" @keyup.enter="addArtist">
+                        <label for="input_artist">演者を追加</label>
+                    </div>
+                    <div class="col s4 m2">
+                        <button class="btn-large waves-effect waves-light blue block-btn" @click="addArtist"><i class="material-icons">add</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 時間にゅーりょく -->
+            <div class="margin-all-little">
+                <span>開始時刻:</span>
+                <select id="start_time_input">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option v-for="startTime in startTimeList">{{startTime}}</option>
+                </select>
+                <!-- <el-time-select clearable="false" v-model="startTimeValue" @change="setStartTime"
+                                :picker-options="{ start: '00:00', step: '00:15', end: '23:45' }"
+                                placeholder="スタート時刻"></el-time-select> -->
+            </div>
+            <div class="margin-all-little">
+                <span>演奏時間:</span>
+                <select id="perform_time_input">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="00:00">00:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="20:00">20:00</option>
+                </select>                
+                <!-- <el-time-select v-model="performTimeValue" @change="resetActTime"
+                                :picker-options="{ start: '00:00', step: '00:05', end: '02:00' }"
+                                placeholder="演奏時間" editable="true"></el-time-select> -->
+            </div>
+            <div class="margin-all-little">
+                <span>転換時間:</span>
+                <select id="switch_time_input">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="00:00">00:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="20:00">20:00</option>
+                </select>                
+                <!-- <el-time-select v-model="switchTimeValue" @change="resetActTime"
+                                :picker-options="{ start: '00:00', step: '00:05', end: '1:00' }"
+                                placeholder="転換時間"></el-time-select> -->
+            </div>
+            <div id="delete_block">
+                <el-button type="default" size="mini" data-clipboard-target="#timeTableText" @click="showDeleteConfirm">RESET ALL</el-button>
+            </div>
+        </div>
+        <!-- <div class="text-white">
+            <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
+            <h4>ADJUST DETAIL</h4>
+            <small>テキスト編集で微調整する</small>
+            <div class="margin-all-little">
+                <textarea style="width:80%;" id="timeTableText" rows="10" placeholder="↑でタイムテを組んでね" v-model="textData" @change="saveEventInfo()"></textarea>
+            </div>
+            <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
+            <h4>COPY TO CLIPBOARD</h4>
+            <small>クリップボードにコピーする</small><br><br>
+            <el-button type="warning" size="large" data-clipboard-target="#timeTableText"><i class="material-icons">content_copy</i></el-button>
+        </div> -->
+    </div>
+    <footer class="footer text-white">
+        <nav>
+            <p><b>AUTHOR 作ったひと</b></p>
+            <i class="material-icons">face</i><br>
+            <span>Suguruguruguru</span><br>
+            <p>
+                <span>Twitter → <a href="https://twitter.com/suguru3193" target="_blank">@suguru3193</a> /</span>
+                <span>suguru3193@gmail.com</span>
+            </p>
+        </nav>
+    </footer>
+    <div class="copyright align-center text-white">
+        <small>©Suguruguruguru 2017</small>
+    </div>    
+</body>
+</html>
+
+<!--Import JavaScript -->
+<script src="./js/vue.min.js"></script>
+<script src="./js/clipboard.js"></script>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script type="text/javascript" src="js/jquery.timepicker.min.js"></script>
+
+<!-- import JavaScript(Element-UI) -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/element-ui/lib/umd/locale/ja.js"></script>
+
+<!--Import original js-->
+<script src="./js/main.js"></script>
+

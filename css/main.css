@@ -1,0 +1,194 @@
+#app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+}
+
+body {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
+h1, h2 {
+    font-weight: bold;
+}
+
+a {
+    color: #42b983;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.bg-blue {
+    background-color: #008080;
+}
+
+.text-white {
+    color: #ffffe0;
+}
+
+.margin-top-bottom {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.margin-all {
+    margin: 40px;
+}
+
+.margin-all-little {
+    margin: 10px 40px 10px 40px;
+}
+
+.pull-left {
+    margin-right: auto;
+}
+
+.lg-font {
+    font-size:2em;
+}
+
+.relative {
+    position: relative;
+}
+
+.header {
+    z-index:1000;
+    background-color: teal;
+    padding: 5px;
+}
+
+.footer {
+    text-align: center;
+    font-size: 0.7em;
+    background-color: #384049;
+    margin-top: 80px;
+    margin-left: -7px;
+    margin-right: -7px;
+    padding: 10px;
+}
+
+.title-head {
+    font-weight: bold;
+    font-size:0.8em;
+    margin-bottom: 40px;
+}
+
+.main-table {
+    background-color: white;
+    color: #444;
+    padding:30px;
+    border-radius:10px;
+}
+
+.block-btn {
+    width: 100%;
+}
+
+.copyright {
+    padding:10px;
+    font-size: 0.7em;
+}
+
+.hide {
+    display: none;
+}
+
+.fixed {
+    font-weight: bold;
+    position: fixed;            /* ヘッダーの固定 */
+    top: 0px;                   /* 位置(上0px) */
+    left: 0px;                  /* 位置(右0px) */
+    width: 100%;                /* 横幅100%　*/
+    height: auto;              /* 縦幅140px */
+}
+
+.operate-button {
+    margin: 5px;
+}
+
+.time-column {
+    width: 60px;
+}
+
+.operate-column {
+    width: 175px;
+}
+
+.sp-operate-column {
+    width: 50px;
+}
+
+.icon-size-adjust {
+    font-size: 0.2em;
+}
+
+[class^="el-icon-my"], [class*=" el-icon-my"] {
+    font-family:"your-font-family" !important;
+
+    /* The following is based on original CSS rules of third-party library */
+    font-size: inherit;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#title_block {
+    font-weight: bold;
+    padding: 50px;
+    border-radius: 200px;
+    width: 210px;
+    background-color: #ffffe0;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 30px;
+    font-size:0.7em;
+}
+
+#delete_block {
+    position: absolute;
+    right: 40px;
+    bottom: 0px;
+}
+
+
+  /* label color */
+  .input-field label {
+    color: #bbb;
+  }
+  /* label focus color */
+  .input-field input[type=text]:focus + label {
+    color: #ffffe0;
+  }
+  /* label underline focus color */
+  .input-field input[type=text]:focus {
+    border-bottom: 1px solid #ffffe0;
+    box-shadow: 0 1px 0 0 #eeeee0;
+  }
+  /* valid color */
+  .input-field input[type=text].valid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+  }
+  /* invalid color */
+  .input-field input[type=text].invalid {
+    border-bottom: 1px solid #E01D1D;
+    box-shadow: 0 1px 0 0 #490202;
+  }
+  /* icon prefix focus color */
+  .input-field .prefix.active {
+    color: #000;
+  }
+       
