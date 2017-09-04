@@ -58,7 +58,7 @@
                         </td>
                         <!--for SP-->
                         <td v-if="isSpMode" class="align-center operate-column" :class="{ 'sp-operate-column':isSpMode }">
-                            <div class='collection'>
+                            <div class='collection' v-if="index !== 0">
                                 <a class="collection-item grey-text" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_up</i></a>
                                 <a class="collection-item grey-text" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_down</i></a>
                                 <a class="collection-item red white-text" @click="deleteArtist(index)"><i class="material-icons">delete</i></a>
@@ -109,7 +109,8 @@
                                 placeholder="転換時間"></el-time-select> -->
             </div>
             <div id="delete_block">
-                <button class="btn red" @click="showDeleteConfirm">RESET ALL</el-button>
+                <!-- <button class="btn red" @click="showDeleteConfirm">RESET ALL</el-button> -->
+                <a class="btn red modal-trigger" href="#delete_modal">RESET ALL</a>
             </div>
         </div>
         <div class="text-white">
@@ -134,6 +135,19 @@
             <small>クリップボードにコピーする</small><br><br>
             <el-button type="warning" size="large" data-clipboard-target="#timeTableText"><i class="material-icons">content_copy</i></el-button>
         </div>
+
+        <!-- 削除確認モーダル -->
+        <div id="delete_modal" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h5>ほんとに全部消すの？？？</h5>
+                <p>入力した情報をすべて削除します。よろしいですか？</p>
+            </div>
+            <div class="modal-footer">                
+                <button class="modal-action modal-close waves-effect waves-red btn red" @click="resetAllData">やったれ</button>
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">やっぱ待って</a>
+            </div>
+        </div>
+
     </div>
     <footer class="footer grey darken-3 text-white">
         <p><b>AUTHOR 作ったひと</b></p>

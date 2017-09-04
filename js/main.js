@@ -235,30 +235,24 @@ const vueApp = new Vue({
         /**
          * @method 全入力内容のリセット
          */
-        showDeleteConfirm() {
-            // ダイアログ表示
-            this.$confirm('入力内容が全部消えるけどほんとうにいいの？', 'リセットするの？', {
-                confirmButtonText: 'うん',
-                cancelButtonText: 'やめとく',
-                type: 'error'
-            }).then(() => {
-                // うん が押されたときの処理
-                this.artists = [];
-                this.eventTitle = '';
-                this.startTimeValue = '18:00',
-                this.performTimeValue = '00:30',
-                this.switchTimeValue = '00:10',
-                this.eventTitle = '',
-                this.textData = '',
-                localStorage.clear('eventTitle');
-                localStorage.clear('artists');
-                this.$message({
-                    type: 'success',
-                    message: 'リセットされました。'
-                });
-            }).catch(() => {
-                // やめとく の場合はなにもしない
+        resetAllData() {
+            console.log('resetAll')
+            // うん が押されたときの処理
+            this.artists = [];
+            this.eventTitle = '';
+            this.startTimeValue = '18:00',
+            this.performTimeValue = '00:30',
+            this.switchTimeValue = '00:10',
+            this.eventTitle = '',
+            this.textData = '',
+            localStorage.clear('eventTitle');
+            localStorage.clear('artists');
+            this.setStartTime();
+            this.$message({
+                type: 'success',
+                message: 'リセットされました。'
             });
+            console.log(this.artists);
         }
     },
     mounted: function () {
@@ -297,9 +291,9 @@ const vueApp = new Vue({
             }
             console.log(this.isSpMode);
         };
-
-        // selectタグ用
+        
         $(document).ready(function() {
+            // selectタグ用
             $('select').material_select();
             $('#start_time_input').on('change', function() {
                 vueApp.startTimeValue = $('#start_time_input').val();
@@ -313,6 +307,9 @@ const vueApp = new Vue({
                 vueApp.switchTimeValue = $('#switch_time_input').val();
                 vueApp.resetActTime();
             });
+
+            // modal用
+            $('.modal').modal();
           });
     }
 });
