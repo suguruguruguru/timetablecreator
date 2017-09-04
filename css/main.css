@@ -32,7 +32,7 @@ a {
 }
 
 .bg-blue {
-    background-color: #008080;
+    background-color: teal;
 }
 
 .text-white {
@@ -148,7 +148,7 @@ a {
     font-weight: bold;
     padding: 50px;
     border-radius: 200px;
-    width: 210px;
+    width: 208px;
     background-color: #ffffe0;
     margin-right: auto;
     margin-left: auto;
