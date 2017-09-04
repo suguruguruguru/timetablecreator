@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>タイムテ作成くん - TIMETABLE GENERATOR</title>
+    <title>タイムテ作成くん - TIMETABLE CREATOR</title>
 
     <!-- ふぁびこん -->
     <link rel="shortcut icon" href="./favicon.png" type="image/ong">
@@ -20,15 +20,15 @@
 <body class="bg-blue">
     <div id="app" class="container">
         <header class="animated header fixed" :class="[ showHeader ? 'fadeInDown':'fadeOutUp', { hide:window.pageYOffset === 0 }]">
-            <div id="heaader_block" class="text-white">
-                <span class="icon-size-adjust"><i class="material-icons">assignment</i></span>
-                <small>&nbsp;タイムテ作成くん - TIMETABLE GENERATOR</small>
+            <div id="header_block" class="text-white">
+                <span><i class="material-icons icon-size-adjust">assignment</i></span>
+                <small>&nbsp;タイムテ作成くん - TIMETABLE CREATOR</small>
             </div>
         </header>
         <!--titleとか-->
         <div id="title_block">
             <h1 class="lg-font"><i class="material-icons">assignment</i></h1>
-            <small>TIMETABLE GENERATOR</small>
+            <small>TIMETABLE CREATOR</small>
         </div>
         <h4 class="text-white title-head">タイムテ作成くん</h4>
         <!--めいん-->
@@ -84,7 +84,6 @@
             <div class="margin-all-little">
                 <span>開始時刻:</span>
                 <select id="start_time_input">
-                    <option value="" disabled selected>Choose your option</option>
                     <option v-for="startTime in startTimeList">{{startTime}}</option>
                 </select>
                 <!-- <el-time-select clearable="false" v-model="startTimeValue" @change="setStartTime"
@@ -94,10 +93,7 @@
             <div class="margin-all-little">
                 <span>演奏時間:</span>
                 <select id="perform_time_input">
-                    <option value="" disabled selected>Choose your option</option>
-                    <option value="00:00">00:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="20:00">20:00</option>
+                    <option v-for="performTime in performTimeList">{{performTime}}</option>
                 </select>                
                 <!-- <el-time-select v-model="performTimeValue" @change="resetActTime"
                                 :picker-options="{ start: '00:00', step: '00:05', end: '02:00' }"
@@ -106,42 +102,47 @@
             <div class="margin-all-little">
                 <span>転換時間:</span>
                 <select id="switch_time_input">
-                    <option value="" disabled selected>Choose your option</option>
-                    <option value="00:00">00:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="20:00">20:00</option>
+                    <option v-for="switchTime in switchTimeList">{{switchTime}}</option>
                 </select>                
                 <!-- <el-time-select v-model="switchTimeValue" @change="resetActTime"
                                 :picker-options="{ start: '00:00', step: '00:05', end: '1:00' }"
                                 placeholder="転換時間"></el-time-select> -->
             </div>
             <div id="delete_block">
-                <el-button type="default" size="mini" data-clipboard-target="#timeTableText" @click="showDeleteConfirm">RESET ALL</el-button>
+                <button class="btn red" @click="showDeleteConfirm">RESET ALL</el-button>
             </div>
         </div>
-        <!-- <div class="text-white">
+        <div class="text-white">
             <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
-            <h4>ADJUST DETAIL</h4>
+            <h6>ADJUST DETAIL</h6>
             <small>テキスト編集で微調整する</small>
             <div class="margin-all-little">
-                <textarea style="width:80%;" id="timeTableText" rows="10" placeholder="↑でタイムテを組んでね" v-model="textData" @change="saveEventInfo()"></textarea>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="timeTableText" class="materialize-textarea" rows="10" placeholder="↑でタイムテを組んでね" v-model="textData" @change="saveEventInfo()"></textarea>
+                            <label for="timeTableText">タップして編集</label>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- <textarea style="width:80%;" id="" ></textarea> -->
             </div>
             <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
-            <h4>COPY TO CLIPBOARD</h4>
+            <h6>COPY TO CLIPBOARD</h6>
             <small>クリップボードにコピーする</small><br><br>
             <el-button type="warning" size="large" data-clipboard-target="#timeTableText"><i class="material-icons">content_copy</i></el-button>
-        </div> -->
+        </div>
     </div>
-    <footer class="footer text-white">
-        <nav>
-            <p><b>AUTHOR 作ったひと</b></p>
-            <i class="material-icons">face</i><br>
-            <span>Suguruguruguru</span><br>
-            <p>
-                <span>Twitter → <a href="https://twitter.com/suguru3193" target="_blank">@suguru3193</a> /</span>
-                <span>suguru3193@gmail.com</span>
-            </p>
-        </nav>
+    <footer class="footer grey darken-3 text-white">
+        <p><b>AUTHOR 作ったひと</b></p>
+        <i class="material-icons">face</i><br>
+        <span>Suguruguruguru</span><br>
+        <p>
+            <span>Twitter → <a href="https://twitter.com/suguru3193" target="_blank">@suguru3193</a> /</span>
+            <span>suguru3193@gmail.com</span>
+        </p>
     </footer>
     <div class="copyright align-center text-white">
         <small>©Suguruguruguru 2017</small>
@@ -150,14 +151,12 @@
 </html>
 
 <!--Import JavaScript -->
+<script src="./js/timepicker.js"></script>
 <script src="./js/vue.min.js"></script>
 <script src="./js/clipboard.js"></script>
-<!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/jquery.timepicker.min.js"></script>
-
-<!-- import JavaScript(Element-UI) -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://unpkg.com/element-ui/lib/umd/locale/ja.js"></script>
 

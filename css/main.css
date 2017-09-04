@@ -75,8 +75,6 @@ a {
     font-size: 0.7em;
     background-color: #384049;
     margin-top: 80px;
-    margin-left: -7px;
-    margin-right: -7px;
     padding: 10px;
 }
 
@@ -132,7 +130,8 @@ a {
 }
 
 .icon-size-adjust {
-    font-size: 0.2em;
+    font-size: 0.7em !important;
+    margin-top: 5px;
 }
 
 [class^="el-icon-my"], [class*=" el-icon-my"] {
@@ -156,13 +155,6 @@ a {
     margin-bottom: 30px;
     font-size:0.7em;
 }
-
-#delete_block {
-    position: absolute;
-    right: 40px;
-    bottom: 0px;
-}
-
 
   /* label color */
   .input-field label {
