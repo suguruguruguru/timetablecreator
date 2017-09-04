@@ -86,27 +86,18 @@
                 <select id="start_time_input">
                     <option v-for="startTime in startTimeList">{{startTime}}</option>
                 </select>
-                <!-- <el-time-select clearable="false" v-model="startTimeValue" @change="setStartTime"
-                                :picker-options="{ start: '00:00', step: '00:15', end: '23:45' }"
-                                placeholder="スタート時刻"></el-time-select> -->
             </div>
             <div class="margin-all-little">
                 <span>演奏時間:</span>
                 <select id="perform_time_input">
                     <option v-for="performTime in performTimeList">{{performTime}}</option>
                 </select>                
-                <!-- <el-time-select v-model="performTimeValue" @change="resetActTime"
-                                :picker-options="{ start: '00:00', step: '00:05', end: '02:00' }"
-                                placeholder="演奏時間" editable="true"></el-time-select> -->
             </div>
             <div class="margin-all-little">
                 <span>転換時間:</span>
                 <select id="switch_time_input">
                     <option v-for="switchTime in switchTimeList">{{switchTime}}</option>
                 </select>                
-                <!-- <el-time-select v-model="switchTimeValue" @change="resetActTime"
-                                :picker-options="{ start: '00:00', step: '00:05', end: '1:00' }"
-                                placeholder="転換時間"></el-time-select> -->
             </div>
             <div id="delete_block">
                 <!-- <button class="btn red" @click="showDeleteConfirm">RESET ALL</el-button> -->
@@ -143,7 +134,7 @@
                 <p>入力した情報をすべて削除します。よろしいですか？</p>
             </div>
             <div class="modal-footer">                
-                <button class="modal-action modal-close waves-effect waves-red btn red" @click="resetAllData">やったれ</button>
+                <button class="modal-action modal-close waves-effect waves-red btn red" @click="resetAllData()">やったれ</button>
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">やっぱ待って</a>
             </div>
         </div>
