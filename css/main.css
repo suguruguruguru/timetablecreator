@@ -32,7 +32,7 @@ a {
 }
 
 .bg-blue {
-    background-color: teal;
+    background-color: #4682b4;
 }
 
 .text-white {
@@ -66,7 +66,7 @@ a {
 
 .header {
     z-index:1000;
-    background-color: teal;
+    background-color: #4682b4;
     padding: 5px;
 }
 
