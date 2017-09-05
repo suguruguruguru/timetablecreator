@@ -152,6 +152,14 @@ a {
     -moz-osx-font-smoothing: grayscale;
 }
 
+@media screen and (min-width:600px) {
+    .select-time {
+        margin-left: auto;
+        margin-right: auto;
+        width: 320px;
+    }
+}
+
 #title_block {
     font-weight: bold;
     padding: 50px;
