@@ -61,7 +61,7 @@
                             <div class='collection' v-if="index !== 0">
                                 <a class="collection-item grey-text" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_up</i></a>
                                 <a class="collection-item grey-text" @click="changeOrder(index, false)"><i class="material-icons">keyboard_arrow_down</i></a>
-                                <a class="collection-item red white-text" @click="deleteArtist(index)"><i class="material-icons">delete</i></a>
+                                <a class="collection-item red white-text" @click="deleteArtist(index)"><i class="material-icons">clear</i></a>
                             </ul>
                         </td>
                     </td>
@@ -176,6 +176,5 @@
   
     ga('create', 'UA-105838051-1', 'auto');
     ga('send', 'pageview');
-  
-  </script>
+</script>
 
