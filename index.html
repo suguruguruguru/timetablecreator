@@ -84,25 +84,21 @@
             <!-- 時間にゅーりょく -->
             <div class="margin-all-little">
                 <span>開始時刻:</span>
-                <select id="start_time_input">
+                <select id="start_time_input" class="select-time">
                     <option v-for="startTime in startTimeList">{{startTime}}</option>
                 </select>
             </div>
             <div class="margin-all-little">
                 <span>演奏時間:</span>
-                <select id="perform_time_input">
+                <select id="perform_time_input" class="select-time">
                     <option v-for="performTime in performTimeList">{{performTime}}</option>
                 </select>                
             </div>
             <div class="margin-all-little">
                 <span>転換時間:</span>
-                <select id="switch_time_input">
+                <select id="switch_time_input" class="select-time">
                     <option v-for="switchTime in switchTimeList">{{switchTime}}</option>
                 </select>                
-            </div>
-            <div id="delete_block">
-                <!-- <button class="btn red" @click="showDeleteConfirm">RESET ALL</el-button> -->
-                <a class="btn red modal-trigger" href="#delete_modal">RESET ALL</a>
             </div>
         </div>
         <div class="text-white">
@@ -126,6 +122,11 @@
             <h6>COPY TO CLIPBOARD</h6>
             <small>クリップボードにコピーする</small><br><br>
             <el-button type="warning" size="large" data-clipboard-target="#timeTableText"><i class="material-icons">content_copy</i></el-button>
+
+            <!--削除ボタン-->
+            <div id="delete_block">
+                <a class="btn red modal-trigger" href="#delete_modal">RESET ALL</a>
+            </div>
         </div>
 
         <!-- 削除確認モーダル -->
