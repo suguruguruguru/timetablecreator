@@ -68,6 +68,11 @@
                     </td>
                 </table>
             </div>
+
+            <!--えくせるぼたん-->
+            <div>
+                <button class="btn green darken-2" @click="downloadExcel">Excelで出力</button>
+            </div>
             <!--演者追加部分 TODO:空っぽやんけ追加-->
             <div class=" margin-top-bottom">
                 <div class="row">
@@ -166,6 +171,8 @@
 <script type="text/javascript" src="js/jquery.timepicker.min.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://unpkg.com/element-ui/lib/umd/locale/ja.js"></script>
+<script src="http://cdn.jsdelivr.net/alasql/0.3/alasql.min.js"></script> 
+<script src="http://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script> 
 
 <!--Import original js-->
 <script src="./js/main.js"></script>

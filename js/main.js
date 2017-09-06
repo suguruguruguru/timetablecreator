@@ -253,6 +253,15 @@ const vueApp = new Vue({
                 message: 'リセットされました。'
             });
             console.log(this.artists);
+        },
+
+        /**
+         * @method excel出力
+         */
+        downloadExcel() {
+            let fileName = this.eventTitle.trim() !== '' ?  this.eventTitle : 'timetable';
+            let opts = [{sheetid:'One',header:true}];
+            let res = alasql('SELECT * INTO XLSX("' + fileName  + '.xlsx",?) FROM ?', [opts,[this.artists]]);
         }
     },
     mounted: function () {
