@@ -35,13 +35,29 @@ a {
     background-color: #4682b4;
 }
 
+.bg-dark {
+    background-color: #333333;
+}
+
+.bg-white {
+    background-color: #dddddd
+}
+
 .text-white {
     color: #ffffe0;
 }
 
+.text-dark {
+    color: #aaa;
+}
+
 .margin-top-bottom {
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 70px;
+    margin-bottom: 70px;
+}
+
+.margin-top {
+    margin-top:200px;
 }
 
 .margin-all {
@@ -66,7 +82,7 @@ a {
 
 .header {
     z-index:1000;
-    background-color: #4682b4;
+    background-color: #333333;
     padding: 5px;
 }
 
@@ -142,6 +158,10 @@ a {
     font-size:18px;
 }
 
+.break-all {
+    word-break: break-all;
+}
+
 [class^="el-icon-my"], [class*=" el-icon-my"] {
     font-family:"your-font-family" !important;
 
@@ -163,17 +183,12 @@ a {
 #title_block {
     font-weight: bold;
     padding: 50px;
-    border-radius: 200px;
-    width: 208px;
+    width: 300px;
     background-color: #ffffe0;
     margin-right: auto;
     margin-left: auto;
     margin-bottom: 30px;
-    font-size:0.7em;
-}
-
-#delete_block {
-    margin-top: 120px;
+    font-size:0.8em;
 }
 
   /* label color */

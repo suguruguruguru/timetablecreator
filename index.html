@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>タイムテ作成くん - TIMETABLE CREATOR</title>
+    <title>タイムテ作成くん ver1.1 - TIMETABLE CREATOR</title>
 
     <!-- ふぁびこん -->
     <link rel="shortcut icon" href="./favicon.png" type="image/ong">
@@ -10,37 +10,46 @@
     <!-- CSS -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="./css/jquery.timepicker.css">
+    <link type="text/css" rel="stylesheet" href="./css/vendor/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="./css/vendor/jquery.timepicker.css">
+    <link rel="stylesheet" href="./css/vendor/animate.css">
+
+    <!-- 個別スタイル -->
     <link rel="stylesheet" href="./css/main.css">
 
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>    <link rel="stylesheet" href="./css/animate.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body class="bg-blue">
+<body class="bg-dark">
     <div id="app" class="container">
         <header class="animated header fixed" :class="[ showHeader ? 'fadeInDown':'fadeOutUp', { hide:window.pageYOffset === 0 }]">
             <div id="header_block" class="text-white">
-                <span><i class="material-icons icon-size-adjust">assignment</i></span>
-                <small>&nbsp;タイムテ作成くん - TIMETABLE CREATOR</small>
+                <span><i class="material-icons icon-size-adjust">music_note</i></span>
+                <small>&nbsp;タイムテ作成くん ver1.1 - TIMETABLE CREATOR</small>
             </div>
         </header>
         <!--titleとか-->
         <div id="title_block">
-            <h1 class="lg-font"><i class="material-icons">assignment</i></h1>
+            <h1 class="lg-font">
+                <i class="material-icons">directions_transit</i>
+                <i class="material-icons">hotel</i>
+                <i class="material-icons">flight</i>
+                <i class="material-icons">music_note</i>
+                <i class="material-icons">nature_people</i>
+            </h1>
             <small>TIMETABLE CREATOR</small>
         </div>
-        <h4 class="text-white title-head">タイムテ作成くん</h4>
+        <h4 class="text-white title-head">タイムテ作成くん ver1.1</h4>
         <!--めいん-->
         <div class="block text-white relative">
             <!--企画名-->
             <div class="input-field align-left">
                 <input id="event_title" type="text" v-model="eventTitle" @change="createTextData()">
-                <label for="event_title">イベント名、企画名を入れてね</label>
+                <label for="event_title">イベント名、企画名、タイトルを入力してね</label>
             </div>
             <!--タイムテ-->
             <div class="main-table">
-                <table class="bordered" style="width: 100%">
+                <table class="bordered break-all" style="width: 100%">
                     <tr>
                         <th class="align-center">開始</th>
                         <th class="align-center">終了</th>
@@ -48,9 +57,9 @@
                         <th class="operate-column" :class="{ 'sp-operate-column':isSpMode }">操作</th>
                     </tr>
                     <tr v-for="(artist, index) in artists">
-                        <td class="time-column align-center">{{artist.time}}</td>
+                        <td class="time-column align-center" >{{artist.time}}</td>
                         <td class="time-column align-center">{{artist.endTime}}</td>
-                        <td>{{artist.name}}</td>
+                        <td v-bind:class="{'text-dark': index===0}">{{artist.name}}</td>
                         <!--for PC-->
                         <td v-if="!isSpMode" class="align-center operate-column">
                             <button v-if="index !== 0" class="operate-button waves-effect waves-light btn-floating" @click="changeOrder(index, true)"><i class="material-icons">keyboard_arrow_up</i></button>
@@ -69,16 +78,12 @@
                 </table>
             </div>
 
-            <!--えくせるぼたん-->
-            <div>
-                <button class="btn green darken-2" @click="downloadExcel">Excelで出力</button>
-            </div>
             <!--演者追加部分 TODO:空っぽやんけ追加-->
-            <div class=" margin-top-bottom">
+            <div class="margin-top-bottom">
                 <div class="row">
                     <div class="input-field align-left col s8 m10">
                         <input id="input_artist" type="text" v-model="inputValue" @keyup.enter="addArtist">
-                        <label for="input_artist">演者を追加</label>
+                        <label for="input_artist">演者・項目を追加</label>
                     </div>
                     <div class="col s4 m2">
                         <button class="btn-large waves-effect waves-light blue block-btn" @click="addArtist"><i class="material-icons">add</i></button>
@@ -88,30 +93,34 @@
 
             <!-- 時間にゅーりょく -->
             <div class="margin-all-little">
-                <span>開始時刻:</span>
+                <span>開始時刻</span>
+                <small> - START TIME - </small>
                 <select id="start_time_input" class="select-time">
                     <option v-for="startTime in startTimeList">{{startTime}}</option>
                 </select>
             </div>
             <div class="margin-all-little">
-                <span>演奏時間:</span>
+                <span>演者・項目の持ち時間</span>
+                <small> - MOCHI TIME - </small>
                 <select id="perform_time_input" class="select-time">
                     <option v-for="performTime in performTimeList">{{performTime}}</option>
                 </select>                
             </div>
             <div class="margin-all-little">
-                <span>転換時間:</span>
+                <span>転換・すきま時間</span>
+                <small> - SUKIMA TIME - </small>
                 <select id="switch_time_input" class="select-time">
                     <option v-for="switchTime in switchTimeList">{{switchTime}}</option>
                 </select>                
             </div>
         </div>
+
         <div class="text-white">
-            <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
-            <h6>ADJUST DETAIL</h6>
-            <small>テキスト編集で微調整する</small>
-            <div class="margin-all-little">
-                <div class="row">
+            <div class="margin-top-bottom">
+                <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
+                <h6>ADJUST DETAIL</h6>
+                <small>テキスト編集でそれぞれの持ち時間、文言などを微調整しましょう！</small>
+                <div class="row margin-top-bottom">
                     <form class="col s12">
                         <div class="row">
                         <div class="input-field col s12">
@@ -121,16 +130,33 @@
                         </div>
                     </form>
                 </div>
-                <!-- <textarea style="width:80%;" id="" ></textarea> -->
             </div>
-            <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
-            <h6>COPY TO CLIPBOARD</h6>
-            <small>クリップボードにコピーする</small><br><br>
-            <el-button type="warning" size="large" data-clipboard-target="#timeTableText"><i class="material-icons">content_copy</i></el-button>
 
-            <!--削除ボタン-->
-            <div id="delete_block">
-                <a class="btn red modal-trigger" href="#delete_modal">RESET ALL</a>
+            <h1 class="lg-font"><i class="el-icon-caret-bottom"></i></h1>
+            <h6>USE YOUR OWN TIMETABLE</h6>
+            <small>これにて完成です！関係者にイライラされないうちに早めに形式を整えて伝達しましょう！</small><br><br>
+
+            <div class="margin-top-bottom">
+                <small>クリップボードにコピー(そのままペーストできます)</small><br><br>
+                <button id="copy_btn" type="button" class="btn btn-large amber darken-1" data-clipboard-target="#timeTableText"><i class="material-icons">content_copy</i></button>
+            </div>
+
+            <!--えくせるぼたん-->
+            <div class="margin-top-bottom">
+                <small>テキストじゃなくてExcelで使いたい</small><br><br>
+                <button class="btn btn-large green darken-2" @click="downloadExcel">Excelで出力</button>
+            </div>
+
+            <!--リセット-->
+            <div class="margin-top-bottom">
+                <small>いったん全部リセットしたい人は</small><br><br>
+                <a class="btn btn-large red modal-trigger" href="#delete_modal">RESET ALL</a>
+            </div>
+
+            <div class="margin-top">
+                <h1 class="lg-font red-text text-darken-2 animated rubberBand infinite"><i class="material-icons">favorite</i></h1>
+                <h6>まじでTHANK YOU FOR USING</h6>
+                <small>Last Updated 10/10/2018</small>
             </div>
         </div>
 
@@ -162,19 +188,19 @@
 </body>
 </html>
 
-<!--Import JavaScript -->
-<script src="./js/timepicker.js"></script>
-<script src="./js/vue.min.js"></script>
-<script src="./js/clipboard.js"></script>
+<!--JS -->
+<script src="./js/vendor/timepicker.js"></script>
+<script src="./js/vendor/vue.min.js"></script>
+<script src="./js/vendor/clipboard.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="js/materialize.min.js"></script>
-<script type="text/javascript" src="js/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="js/vendor/materialize.min.js"></script>
+<script type="text/javascript" src="js/vendor/jquery.timepicker.min.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://unpkg.com/element-ui/lib/umd/locale/ja.js"></script>
-<script src="./js/alasql.js"></script> 
-<script src="js/xlsx.js"></script> 
+<script src="./js/vendor/alasql.js"></script> 
+<script src="js/vendor/xlsx.js"></script> 
 
-<!--Import original js-->
+<!--個別JS-->
 <script src="./js/main.js"></script>
 
 <script>

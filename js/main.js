@@ -5,7 +5,6 @@ const vueApp = new Vue({
         return {
             inputValue: '',
             artists: [],
-            hasError: false,
             startTimeValue: '18:00',
             performTimeValue: '00:30',
             switchTimeValue: '00:10',
@@ -20,10 +19,17 @@ const vueApp = new Vue({
          * @method 演者を追加する
          */
         addArtist: function () {
-            console.log('addArtist')
+            // console.log('addArtist')
             this.inputValue = this.inputValue.trim();
-            if (this.inputValue.length > 0) {
-                this.hasError = false;
+            if (this.inputValue.length > 100) {
+                // 文字数多すぎ系
+                vueApp.showErrorMessage('文字数多すぎです', '見にくくなるし100文字以内にしとこうね')
+            } else if (this.inputValue.length > 0) {
+                // 項目数チェック
+                if(this.artists.length > 50) {
+                    vueApp.showErrorMessage('項目数多すぎです', '50項目以内にしとこうね')
+                }
+                // 項目追加
                 this.artists.push({
                     name: this.inputValue,
                     time: this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, this.artists.length),
@@ -31,7 +37,8 @@ const vueApp = new Vue({
                 });
                 this.inputValue = '';
             } else {
-                this.hasError = true;
+                // 空欄系
+                vueApp.showErrorMessage('空欄やん', 'なんか書いて追加してや')
             }
             this.createTextData();
             localStorage.setItem('artists', JSON.stringify(this.artists));
@@ -50,12 +57,12 @@ const vueApp = new Vue({
          * @method 開始時間をセット
          */
         setStartTime: function () {
-            console.log('setStartTime', this.startTimeValue)
+            // console.log('setStartTime', this.startTimeValue)
             if (this.artists !== null) {
                 if (this.startTimeValue !== '') {
                     // アーティスト一覧の先頭(スタート時刻)を削除
                     this.artists.splice(0, 1);
-                    this.artists.unshift({time: this.startTimeValue, name: `スタート`, endTime: ''});
+                    this.artists.unshift({time: this.startTimeValue, name: `(イベント・リハーサルスタート)`, endTime: ''});
                 } else {
                     this.artists[0].time = this.startTimeValue;
                 }
@@ -65,12 +72,12 @@ const vueApp = new Vue({
         },
 
         /**
-         * @method 演者の演奏開始時間を算出
-         * @param startTime スタート時刻
+         * @method 項目の開始・終了時刻を算出
+         * @param startTime 全体のスタート時刻
          * @param performTime 演奏時間
          * @param switchTime 転換時間
          * @param index 出演順
-         * @param calcStart 開始時刻を求める場合はtrue
+         * @param calcStart 開始時刻を求める場合はtrue 終了時刻を求める場合はfalse
          * @return 演奏開始時刻
          */
         calcActTime(startTime, performTime, switchTime, index, calcStart = true) {
@@ -159,7 +166,7 @@ const vueApp = new Vue({
             let eventInfoStr = localStorage.getItem('eventInfo');
             if (eventInfoStr !== null) {
                 let eventJson = JSON.parse(eventInfoStr);
-                console.log(eventJson);
+                // console.log(eventJson);
                 this.eventTitle = eventJson.eventTitle;
                 this.startTimeValue = eventJson.startTimeValue;
                 this.performTimeValue = eventJson.performTimeValue;
@@ -196,14 +203,25 @@ const vueApp = new Vue({
         },
 
         /**
-         * @method コピーに成功したら通知を表示する
+         * @method 成功時の通知を表示する
          */
-        showSuccessMessage() {
+        showSuccessMessage(titleStr, messageStr) {
             this.$notify.success({
-                title: 'やったでおい',
-                message: 'タイムテをクリップボードにコピーしたぞ'
+                title: titleStr,
+                message: messageStr
             });
         },
+
+        /**
+         * @method エラー時の通知を表示する
+         */
+        showErrorMessage(titleStr, messageStr) {
+            this.$notify.error({
+                title: titleStr,
+                message: messageStr
+            });
+        },
+
 
         /**
          * @method イベントの情報をlocalStorageに入れる
@@ -217,7 +235,7 @@ const vueApp = new Vue({
                 textData: this.textData
             };
             localStorage.setItem('eventInfo', JSON.stringify(eventInfo));
-            // console.log('Changes has been saved.');
+            // // console.log('Changes has been saved.');
         },
 
         /**
@@ -236,7 +254,7 @@ const vueApp = new Vue({
          * @method 全入力内容のリセット
          */
         resetAllData() {
-            console.log('resetAll')
+            // console.log('resetAll')
             // うん が押されたときの処理
             this.artists = [];
             this.eventTitle = '';
@@ -248,11 +266,8 @@ const vueApp = new Vue({
             localStorage.clear('eventTitle');
             localStorage.clear('artists');
             this.setStartTime();
-            this.$message({
-                type: 'success',
-                message: 'リセットされました。'
-            });
-            console.log(this.artists);
+            vueApp.showSuccessMessage('リセットしました…', '最初からやり直してください…');
+            // console.log(this.artists);
         },
 
         /**
@@ -273,11 +288,11 @@ const vueApp = new Vue({
         }
 
         // Clipboard.js用
-        let clipboard = new Clipboard('.el-button--warning');
+        let clipboard = new Clipboard('#copy_btn');
         clipboard.on('success', function(e) {
             e.clearSelection();
             // コピーした旨のメッセージ表示
-            vueApp.showSuccessMessage();
+            vueApp.showSuccessMessage('やったでおい', 'タイムテをクリップボードにコピーしました！！！');
         });
 
         // スクロール量監視
@@ -298,10 +313,10 @@ const vueApp = new Vue({
             } else {
                 vueApp.isSpMode = false;
             }
-            console.log(this.isSpMode);
+            // // console.log(this.isSpMode);
         };
         
-        $(document).ready(function() {
+        $(function() {
             // selectタグ用
             $('select').material_select();
             $('#start_time_input').on('change', function() {
