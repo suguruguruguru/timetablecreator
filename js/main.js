@@ -1,18 +1,16 @@
 // Vueの要素指定
 const vueApp = new Vue({
     el: '#app',
-    data() {
-        return {
-            inputValue: '',
-            artists: [],
-            startTimeValue: '18:00',
-            performTimeValue: '00:30',
-            switchTimeValue: '00:10',
-            eventTitle: 'Sample Event vol.1',
-            textData: '',
-            showHeader: false,
-            isSpMode: false
-        }
+    data: {
+        inputValue: '',
+        artists: [],
+        startTimeValue: '18:00',
+        performTimeValue: '00:30',
+        switchTimeValue: '00:10',
+        eventTitle: 'Sample Event vol.1',
+        textData: '',
+        showHeader: false,
+        isSpMode: false
     },
     methods: {
         /**
@@ -32,7 +30,7 @@ const vueApp = new Vue({
                 // 項目追加
                 this.artists.push({
                     name: this.inputValue,
-                    time: this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, this.artists.length),
+                    time: this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, this.artists.length, true),
                     endTime: this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, this.artists.length, false)
                 });
                 this.inputValue = '';
@@ -62,7 +60,7 @@ const vueApp = new Vue({
                 if (this.startTimeValue !== '') {
                     // アーティスト一覧の先頭(スタート時刻)を削除
                     this.artists.splice(0, 1);
-                    this.artists.unshift({time: this.startTimeValue, name: `(イベント・リハーサルスタート)`, endTime: ''});
+                    this.artists.unshift({time: this.startTimeValue, name: '(イベント・リハーサルスタート)', endTime: ''});
                 } else {
                     this.artists[0].time = this.startTimeValue;
                 }
@@ -80,7 +78,7 @@ const vueApp = new Vue({
          * @param calcStart 開始時刻を求める場合はtrue 終了時刻を求める場合はfalse
          * @return 演奏開始時刻
          */
-        calcActTime(startTime, performTime, switchTime, index, calcStart = true) {
+        calcActTime: function(startTime, performTime, switchTime, index, calcStart) {
             this.startTimeValue = this.timeFormatChecker(startTime);
             this.performTimeValue = this.timeFormatChecker(performTime);
             this.switchTimeValue = this.timeFormatChecker(switchTime);
@@ -128,10 +126,10 @@ const vueApp = new Vue({
         /**
          * @method アーティスト削除や時刻変更があった際、表示しているタイムテの時間を再描画
          */
-        resetActTime() {
+        resetActTime: function() {
             for(let i = 0; i < this.artists.length; i++) {
                 if (i !== 0) {
-                    this.artists[i].time = this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, i);
+                    this.artists[i].time = this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, i, true);
                     this.artists[i].endTime = this.calcActTime(this.startTimeValue, this.performTimeValue, this.switchTimeValue, i, false);
                 }
             }
@@ -144,7 +142,7 @@ const vueApp = new Vue({
          * @param index 入れ替えるアーティストの行番号
          * @param up 上に移動するかどうか
          */
-        changeOrder(index, up) {
+        changeOrder: function(index, up) {
             let moveRow;
             let movedRow;
             moveRow = this.artists[index];
@@ -161,7 +159,7 @@ const vueApp = new Vue({
         /**
          * @method LocalStorageにあるデータを読み込む
          */
-        loadStorageData() {
+        loadStorageData: function() {
             // イベントの情報を読み込む
             let eventInfoStr = localStorage.getItem('eventInfo');
             if (eventInfoStr !== null) {
@@ -187,17 +185,17 @@ const vueApp = new Vue({
         /**
          * @method タイムテーブルをテキストに整形してtextareaへ
          */
-        createTextData() {
+        createTextData: function() {
             if (this.artists.length > 0) {
                 let resultTextData = '';
 
                 // 開始時刻-終了時刻 なまえ 改行 でループ
-                this.artists.forEach(v => {
-                    resultTextData = `${resultTextData}${v.time}-${v.endTime} ${v.name}\r\n`;
+                this.artists.forEach(function(v) {
+                    resultTextData = resultTextData+v.time+'-'+v.endTime+' '+v.name+'\r\n';
                 });
 
                 // 企画名をくっつけてかんせー
-                this.textData = `"${this.eventTitle}"\r\n\r\n${resultTextData}`;
+                this.textData = '"'+this.eventTitle+'"\r\n\r\n'+resultTextData;
             }
             this.saveEventInfo();
         },
@@ -205,7 +203,7 @@ const vueApp = new Vue({
         /**
          * @method 成功時の通知を表示する
          */
-        showSuccessMessage(titleStr, messageStr) {
+        showSuccessMessage: function(titleStr, messageStr) {
             this.$notify.success({
                 title: titleStr,
                 message: messageStr
@@ -215,7 +213,7 @@ const vueApp = new Vue({
         /**
          * @method エラー時の通知を表示する
          */
-        showErrorMessage(titleStr, messageStr) {
+        showErrorMessage: function(titleStr, messageStr) {
             this.$notify.error({
                 title: titleStr,
                 message: messageStr
@@ -226,7 +224,7 @@ const vueApp = new Vue({
         /**
          * @method イベントの情報をlocalStorageに入れる
          */
-        saveEventInfo() {
+        saveEventInfo: function() {
             let eventInfo = {
                 eventTitle: this.eventTitle,
                 startTimeValue: this.startTimeValue,
@@ -243,7 +241,7 @@ const vueApp = new Vue({
          * @param str
          * @returns {*}
          */
-        timeFormatChecker(str) {
+        timeFormatChecker: function(str) {
             if(str.length < 5) {
                 str = '00:00';
             }
@@ -253,7 +251,7 @@ const vueApp = new Vue({
         /**
          * @method 全入力内容のリセット
          */
-        resetAllData() {
+        resetAllData: function() {
             // console.log('resetAll')
             // うん が押されたときの処理
             this.artists = [];
@@ -273,7 +271,7 @@ const vueApp = new Vue({
         /**
          * @method excel出力
          */
-        downloadExcel() {
+        downloadExcel: function() {
             let fileName = this.eventTitle.trim() !== '' ?  this.eventTitle : 'timetable';
             let opts = [{sheetid:'One',header:true}];
             let res = alasql('SELECT * INTO XLSX("' + fileName  + '.xlsx",?) FROM ?', [opts,[this.artists]]);
